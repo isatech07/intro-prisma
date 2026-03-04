@@ -36,3 +36,35 @@ export const createUsers = async (users: Prisma.UserCreateInput[]) => {
         skipDuplicates: true
     })
 }
+
+export const getAllUsers = async () => {
+    try {
+      return await prisma.user.findMany({
+        select:{
+          id: true,
+          name: true,
+          email: true,
+          status: true,
+        }
+      })
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      return false;
+    }
+}
+
+export const getUserByEmail = async (email: string) => {
+  try {
+    return await prisma.user.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        name: true,
+        status: true,
+      }
+    })
+  } catch (error) {
+    console.error("Error fetching user by email:", error);
+    return false;
+  }
+}
